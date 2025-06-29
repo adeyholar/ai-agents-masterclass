@@ -1,0 +1,27 @@
+AI MASTERCLASS SETUP - CONTINUATION GUIDE
+========================================
+
+CURRENT STATUS:
+✅ Docker + WSL2 + Ollama running
+✅ 64GB RAM optimized
+✅ Models downloaded:
+   - llama3.3:70b (Research beast)
+   - codellama:latest (Technical specialist)
+   - llama3.2:latest (Fast general purpose)
+
+WORKING DIRECTORIES:
+- Main: D:\AI\Gits\ai-agents-masterclass\
+- Workspace: D:\AI\Gits\ai-agents-masterclass\multi_agent_workspace\
+
+DOCKER COMMANDS:
+- Check containers: docker ps
+- Access Ollama: docker exec -it ollama ollama list
+- Download models: docker exec -it ollama ollama pull [model]
+
+EMAIL SETUP:
+- Gmail app password configured
+- SMTP: smtp.gmail.com:587
+
+CONDA ENVIRONMENT:
+- Name: ai4beginner_3.11
+- Activate: conda activate ai4beginner_3.11
