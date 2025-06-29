@@ -13,3 +13,4 @@ node_modules
 venv
 venv2
 *.db
+*.pdf
