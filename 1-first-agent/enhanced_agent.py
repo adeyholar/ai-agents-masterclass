@@ -5,6 +5,7 @@ from datetime import datetime
 import subprocess
 import webbrowser
 from pathlib import Path
+import re
 
 # Local Ollama configuration
 OLLAMA_URL = "http://localhost:11434/api/generate"
@@ -117,7 +118,7 @@ def open_working_directory():
         if os.name == 'nt':  # Windows
             os.startfile(WORKING_DIR)
         elif os.name == 'posix':  # macOS and Linux
-            subprocess.run(['open', WORKING_DIR] if sys.platform == 'darwin' else ['xdg-open', WORKING_DIR])
+            subprocess.run(['open', WORKING_DIR] if os.uname().sysname == 'Darwin' else ['xdg-open', WORKING_DIR])
         return f"📂 Opened working directory: {WORKING_DIR}"
     except Exception as e:
         return f"❌ Error opening directory: {e}"
@@ -169,19 +170,7 @@ def save_conversation_log():
     except Exception as e:
         return f"❌ Error saving conversation: {e}"
 
-# ===== TOOL DETECTION AND EXECUTION =====
-
-AVAILABLE_TOOLS = {
-    "create_file": create_file,
-    "read_file": read_file,
-    "list_files": list_files,
-    "delete_file": delete_file,
-    "open_website": open_website,
-    "get_current_time": get_current_time,
-    "open_working_directory": open_working_directory,
-    "create_task_list": create_task_list,
-    "save_conversation_log": save_conversation_log
-}
+# ===== IMPROVED TOOL DETECTION AND EXECUTION =====
 
 def parse_and_execute_tools(ai_response, user_input):
     """Parse AI response for tool usage and execute them"""
@@ -189,55 +178,90 @@ def parse_and_execute_tools(ai_response, user_input):
     
     user_lower = user_input.lower()
     
-    # File operations
-    if any(phrase in user_lower for phrase in ["create file", "write file", "save to file", "make a file"]):
+    # More aggressive file creation detection
+    if any(phrase in user_lower for phrase in [
+        "create file", "create a file", "write file", "save to file", 
+        "make a file", "new file", "file called", "file named",
+        "save as", "write to", "create document"
+    ]):
         filename, content = extract_file_info(user_input, ai_response)
         if filename:
             result = create_file(filename, content)
             tools_used.append(result)
     
-    elif any(phrase in user_lower for phrase in ["read file", "show file", "open file", "view file"]):
+    # Better read file detection
+    elif any(phrase in user_lower for phrase in [
+        "read file", "show file", "open file", "view file", 
+        "read the file", "show me file", "display file",
+        "contents of", "what's in"
+    ]):
         filename = extract_filename(user_input)
         if filename:
             result = read_file(filename)
             tools_used.append(result)
     
-    elif any(phrase in user_lower for phrase in ["list files", "show files", "what files", "files in"]):
+    # List files detection
+    elif any(phrase in user_lower for phrase in [
+        "list files", "show files", "what files", "files in",
+        "list all files", "show all files", "directory contents",
+        "ls", "dir"
+    ]):
         directory = extract_directory(user_input)
         result = list_files(directory)
         tools_used.append(result)
     
-    elif any(phrase in user_lower for phrase in ["delete file", "remove file", "delete"]):
+    # Delete file detection
+    elif any(phrase in user_lower for phrase in [
+        "delete file", "remove file", "delete the file",
+        "rm ", "del "
+    ]):
         filename = extract_filename(user_input)
         if filename:
             result = delete_file(filename)
             tools_used.append(result)
     
-    elif any(phrase in user_lower for phrase in ["open folder", "show folder", "open directory", "working directory"]):
+    # Working directory detection
+    elif any(phrase in user_lower for phrase in [
+        "open folder", "show folder", "open directory", 
+        "working directory", "open workspace", "show workspace",
+        "open explorer", "file explorer"
+    ]):
         result = open_working_directory()
         tools_used.append(result)
     
     # Web operations
-    elif any(phrase in user_lower for phrase in ["open website", "open url", "browse to", "go to"]):
+    elif any(phrase in user_lower for phrase in [
+        "open website", "open url", "browse to", "go to",
+        "visit", "navigate to"
+    ]):
         url = extract_url(user_input)
         if url:
             result = open_website(url)
             tools_used.append(result)
     
     # Time operations
-    elif any(phrase in user_lower for phrase in ["time", "date", "current time", "what time"]):
+    elif any(phrase in user_lower for phrase in [
+        "time", "date", "current time", "what time",
+        "now", "today"
+    ]):
         result = get_current_time()
         tools_used.append(result)
     
     # Task management
-    elif any(phrase in user_lower for phrase in ["task list", "todo", "create tasks", "make a list"]):
+    elif any(phrase in user_lower for phrase in [
+        "task list", "todo", "create tasks", "make a list",
+        "task list with", "create a task list", "todo list"
+    ]):
         tasks = extract_tasks(user_input, ai_response)
         if tasks:
             result = create_task_list(tasks)
             tools_used.append(result)
     
     # Conversation logging
-    elif any(phrase in user_lower for phrase in ["save conversation", "log conversation", "save chat"]):
+    elif any(phrase in user_lower for phrase in [
+        "save conversation", "log conversation", "save chat",
+        "export chat"
+    ]):
         result = save_conversation_log()
         tools_used.append(result)
     
@@ -247,41 +271,56 @@ def extract_file_info(user_input, ai_response):
     """Extract filename and content from user input and AI response"""
     # Default filename
     filename = f"document_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-    content = ai_response
+    content = "File created by AI Assistant\n\n" + ai_response
     
-    # Look for filename in user input
-    words = user_input.split()
-    for i, word in enumerate(words):
-        if word.lower() in ["file", "called", "named", "as"] and i + 1 < len(words):
-            potential_filename = words[i + 1].replace('"', '').replace("'", "")
-            if '.' in potential_filename or len(potential_filename) > 2:
-                if '.' not in potential_filename:
-                    potential_filename += '.txt'
-                filename = potential_filename
-                break
+    # Look for "called" or "named" patterns
+    called_match = re.search(r'file\s+(?:called|named)\s+([^\s,]+(?:\.[a-zA-Z]{2,4})?)', user_input, re.IGNORECASE)
+    if called_match:
+        filename = called_match.group(1)
+        if '.' not in filename:
+            filename += '.txt'
     
-    # Look for quoted filenames
-    import re
-    quoted_match = re.search(r'["\']([^"\']+\.[a-zA-Z]{2,4})["\']', user_input)
+    # Pattern: quoted filenames
+    quoted_match = re.search(r'["\']([^"\']+(?:\.[a-zA-Z]{2,4})?)["\']', user_input)
     if quoted_match:
         filename = quoted_match.group(1)
+        if '.' not in filename:
+            filename += '.txt'
+    
+    # Look for file extensions in user input
+    ext_match = re.search(r'\b(\w+\.\w{2,4})\b', user_input)
+    if ext_match:
+        filename = ext_match.group(1)
+    
+    # Extract content - look for "with" keyword
+    if " with " in user_input.lower():
+        content_part = user_input.lower().split(" with ", 1)[1]
+        content = content_part.strip()
+    elif " containing " in user_input.lower():
+        content_part = user_input.lower().split(" containing ", 1)[1]
+        content = content_part.strip()
     
     return filename, content
 
 def extract_filename(user_input):
     """Extract filename from user input"""
-    import re
-    
     # Look for quoted filenames first
     quoted_match = re.search(r'["\']([^"\']+)["\']', user_input)
     if quoted_match:
         return quoted_match.group(1)
     
     # Look for words with extensions
-    words = user_input.split()
-    for word in words:
-        if '.' in word and len(word) > 3:
-            return word.replace('"', '').replace("'", "")
+    ext_match = re.search(r'\b(\w+\.\w{2,4})\b', user_input)
+    if ext_match:
+        return ext_match.group(1)
+    
+    # Look for file followed by name
+    file_match = re.search(r'file\s+(\w+(?:\.\w{2,4})?)', user_input, re.IGNORECASE)
+    if file_match:
+        filename = file_match.group(1)
+        if '.' not in filename:
+            filename += '.txt'
+        return filename
     
     return None
 
@@ -295,8 +334,6 @@ def extract_directory(user_input):
 
 def extract_url(user_input):
     """Extract URL from user input"""
-    import re
-    
     # Look for URLs with protocols
     url_match = re.search(r'https?://[^\s]+', user_input)
     if url_match:
@@ -318,7 +355,7 @@ def extract_tasks(user_input, ai_response):
     """Extract tasks from user input or AI response"""
     # Remove the command part to get just the tasks
     task_text = user_input
-    for phrase in ["create task list", "make a list", "todo", "tasks"]:
+    for phrase in ["create task list", "make a list", "todo", "tasks", "task list with"]:
         if phrase in user_input.lower():
             task_text = user_input.lower().replace(phrase, "").replace("with:", "").replace(":", "").strip()
             break

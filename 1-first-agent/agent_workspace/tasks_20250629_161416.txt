@@ -1,0 +1,6 @@
+Task List - Created: 2025-06-29 16:14:16
+==================================================
+
+1. [ ] create a  buy groceries
+2. [ ] finish project
+3. [ ] call client"
