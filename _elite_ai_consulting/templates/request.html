@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Analysis - Elite AI Consulting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('home') }}" class="back-link">← Back to Home</a>
+        
+        <h1>🎯 Request Elite Analysis</h1>
+        
+        <div class="project-examples">
+            <h3>💡 Example Projects We Excel At:</h3>
+            <ul>
+                <li>Digital transformation strategies for traditional industries</li>
+                <li>Market entry analysis for new products or regions</li>
+                <li>Competitive intelligence and benchmarking studies</li>
+                <li>Technology implementation roadmaps</li>
+                <li>Customer retention and growth strategies</li>
+                <li>Operational efficiency optimization</li>
+                <li>Custom Analysis</li>
+            </ul>
+        </div>
+        
+        <form id="projectForm">
+            <div class="form-group">
+                <label for="client_name">Your Name *</label>
+                <input type="text" id="client_name" name="client_name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="client_email">Email Address *</label>
+                <input type="email" id="client_email" name="client_email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="company">Company/Organization</label>
+                <input type="text" id="company" name="company">
+            </div>
+            
+            <div class="form-group">
+                <label for="project_type">Project Type *</label>
+                <select id="project_type" name="project_type" required>
+                    <option value="">Select project type...</option>
+                    <option value="market_analysis">Market Analysis & Research</option>
+                    <option value="digital_transformation">Digital Transformation Strategy</option>
+                    <option value="competitive_intelligence">Competitive Intelligence</option>
+                    <option value="technology_roadmap">Technology Implementation</option>
+                    <option value="business_strategy">Business Strategy Development</option>
+                    <option value="operational_optimization">Operational Optimization</option>
+                    <option value="custom">Custom Analysis</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="project_description">Project Description *</label>
+                <textarea id="project_description" name="project_description" 
+                          placeholder="Describe your strategic challenge, objectives, and what you hope to achieve..." required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="timeline">Desired Timeline</label>
+                <select id="timeline" name="timeline">
+                    <option value="immediate">Immediate (within 24 hours)</option>
+                    <option value="urgent">Urgent (within 3 days)</option>
+                    <option value="standard">Standard (within 1 week)</option>
+                    <option value="flexible">Flexible</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="submit-btn">
+                🚀 Request Elite Analysis
+            </button>
+        </form>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Status - Elite AI Consulting</title>
+    <meta http-equiv="refresh" content="10">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="status-container">
+        <div class="status-icon">
+            {% if project.status in ['processing', 'analyzing'] %}
+                🧠
+            {% elif project.status == 'completed' %}
+                ✅
+            {% else %}
+                ❌
+            {% endif %}
+        </div>
+        
+        <div class="status-message">
+            {{ status_message }}
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 
+                {% if project.status == 'processing' %}25%
+                {% elif project.status == 'analyzing' %}75%
+                {% elif project.status == 'completed' %}100%
+                {% else %}0%
+                {% endif %}">
+            </div>
+        </div>
+        
+        <div class="project-info">
+            <h3>Project Details</h3>
+            <p><strong>ID:</strong> {{ project.id }}</p>
+            <p><strong>Client:</strong> {{ project.client_name }}</p>
+            <p><strong>Type:</strong> {{ project.project_type.replace('_', ' ').title() }}</p>
+            <p><strong>Status:</strong> {{ project.status.title() }}</p>
+        </div>
+        
+        {% if project.status == 'completed' %}
+            <p style="color: #27ae60; font-weight: bold; font-size: 1.2rem;">Elite analysis complete! Check your email for deliverables.</p>
+        {% elif project.status == 'error' %}
+            <p style="color: #e74c3c;">Error: {{ project.get('error', 'Unknown error') }}</p>
+        {% endif %}
+        
+        <a href="{{ url_for('home') }}" class="back-link">← Return to Home</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,300 @@
+/* General Body Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px; /* Add padding for smaller screens */
+    display: flex; /* For centering content on status page */
+    align-items: center;
+    justify-content: center;
+}
+
+/* Container for main content */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 50px; /* Increased padding */
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+/* Hero Section (Home Page) */
+.hero {
+    text-align: center;
+    padding: 80px 0;
+    color: white; /* Applies to hero text specifically */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Re-apply gradient for hero */
+    border-radius: 20px 20px 0 0; /* Match container border-radius */
+    margin: -50px -50px 0 -50px; /* Adjust to cover container edges */
+    padding-top: 100px; /* More space at top */
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero p {
+    font-size: 1.3rem;
+    margin-bottom: 40px;
+    opacity: 0.9;
+}
+
+/* Call to Action Button */
+.cta-button, .submit-btn {
+    display: inline-block;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    padding: 18px 40px;
+    text-decoration: none;
+    border: none; /* For submit-btn */
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+
+.cta-button:hover, .submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+}
+
+/* Features Section */
+.features {
+    background: white; /* Redundant if already in container */
+    margin: 60px 0;
+    padding: 60px 40px; /* Adjusted padding */
+    border-radius: 20px; /* Redundant if already in container */
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1); /* Redundant if already in container */
+    /* Remove the above redundant styles if the features div is inside the .container */
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-top: 40px;
+}
+
+.feature {
+    text-align: center;
+    padding: 30px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05); /* Added subtle shadow */
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.feature h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+/* Team Section */
+.team-section {
+    background: rgba(255,255,255,0.95);
+    margin: 40px 0;
+    padding: 50px 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.team-member {
+    text-align: center;
+    padding: 25px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.member-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+/* Pricing Section */
+.pricing {
+    background: rgba(255,255,255,0.95);
+    padding: 50px 40px;
+    border-radius: 20px;
+    text-align: center;
+    margin: 40px 0;
+}
+
+.price-tag {
+    font-size: 3rem;
+    color: #27ae60;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 40px;
+    color: white;
+    opacity: 0.8;
+}
+
+/* Form Specific Styles (Request Page) */
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #667eea;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.project-examples {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.project-examples h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.project-examples ul {
+    color: #666;
+    line-height: 1.8;
+    list-style-position: inside; /* Keeps bullets inside for better alignment */
+}
+
+/* Status Page Specific Styles */
+.status-container {
+    background: white;
+    border-radius: 20px;
+    padding: 50px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    max-width: 600px;
+    width: 100%; /* Ensure it takes full width on smaller screens */
+}
+
+.status-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.status-message {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 30px;
+}
+
+.project-info {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 15px;
+    margin: 30px 0;
+    text-align: left; /* Align info text to left */
+}
+.project-info p {
+    margin-bottom: 10px; /* Spacing for paragraphs */
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    transition: width 0.3s ease;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .container, .status-container {
+        padding: 30px;
+        margin: 20px;
+    }
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    .hero p {
+        font-size: 1rem;
+    }
+    .cta-button, .submit-btn {
+        padding: 15px 30px;
+        font-size: 1rem;
+    }
+    .features-grid, .team-grid {
+        grid-template-columns: 1fr;
+    }
+    .feature, .team-member {
+        padding: 20px;
+    }
+}
